@@ -14,27 +14,36 @@ public class DataGenerator {
     }
 
     public static String generateDate(int shift) {
-        // TODO: добавить логику для объявления переменной date и задания её значения, для генерации строки с датой
-        // Вы можете использовать класс LocalDate и его методы для получения и форматирования даты
-        return date;
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate newDay = today.plusDays(shift);
+        return newDay.format(formatter);
     }
 
     public static String generateCity(String locale) {
-        // TODO: добавить логику для объявления переменной city и задания её значения, генерацию можно выполнить
-        // с помощью Faker, либо используя массив валидных городов и класс Random
-        return city;
+        String[] cities = new String[]{
+                "Тамбов", "Сыктывкар", "Ставрополь", "Смоленск", "Симферополь", "Севастополь", "Саратов", "Саранск",
+                "Ярославль", "Якутск", "Южно-Сахалинск", "Элиста", "Чита", "Челябинск", "Чебоксары",
+                "Ханты-Мансийск", "Хабаровск", "Уфа", "Ульяновск", "Улан-Удэ", "Тюмень", "Тула", "Томск", "Тверь",
+                "Санкт-Петербург", "Самара", "Рязань", "Ростов-на-Дону", "Псков", "Петропавловск-Камчатский", "Петрозаводск",
+                "Пермь", "Пенза", "Мурманск", "Москва", "Махачкала", "Магадан", "Липецк",
+                "Курск", "Курган", "Красноярск", "Краснодар", "Кострома", "Киров", "Кемерово", "Калуга",
+                "Калининград", "Казань", "Йошкар-Ола", "Иркутск", "Ижевск", "Иваново", "Екатеринбург",
+                "Грозный", "Воронеж", "Вологда", "Волгоград", "Владимир", "Владикавказ", "Владивосток", "Великий Новгород",
+                "Брянск", "Благовещенск", "Белгород", "Оренбург", "Орёл", "Омск", "Новосибирск", "Нижний Новгород", "Нальчик",
+        };
+        return cities[new Random().nextInt(cities.length)];
     }
 
     public static String generateName(String locale) {
-        // TODO: добавить логику для объявления переменной name и задания её значения, для генерации можно
-        // использовать Faker
-        return name;
+        Faker faker = new Faker(new Locale(locale));
+        return faker.name().lastName() + " " + faker.name().firstName();
     }
 
     public static String generatePhone(String locale) {
-        // TODO: добавить логику для объявления переменной phone и задания её значения, для генерации можно
-        // использовать Faker
-        return phone;
+        Faker faker = new Faker(new Locale(locale));
+        return faker.phoneNumber().phoneNumber();
+
     }
 
     public static class Registration {
@@ -42,16 +51,31 @@ public class DataGenerator {
         }
 
         public static UserInfo generateUser(String locale) {
-            // TODO: добавить логику для создания пользователя user с использованием методов generateCity(locale),
-            // generateName(locale), generatePhone(locale)
+            UserInfo user = new UserInfo(
+                    generateCity(locale),
+                    generateName(locale),
+                    generatePhone(locale)
+            );
+
             return user;
         }
     }
 
-    @Value
+    @Value //аннотоция ламбока - можно посмотреть , открыв refactor - delombook - не дает изменять объекты
     public static class UserInfo {
         String city;
         String name;
         String phone;
+
+        public String getCity() {
+        return city; }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
     }
 }
